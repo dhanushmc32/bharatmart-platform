@@ -1,0 +1,24 @@
+# Environment & Secrets
+.env
+.env.local
+*.pem
+*.key
+
+# Java / Maven
+backend/target/
+*.jar
+*.war
+*.class
+
+# Node / React
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# IDEs & OS
+.idea/
+*.iml
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db

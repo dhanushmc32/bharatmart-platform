@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://bharatmart.in/schema/integration/v1"
+           xmlns:tns="http://bharatmart.in/schema/integration/v1"
+           elementFormDefault="qualified">
+
+    <xs:element name="BharatMartMessage">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Header" type="tns:HeaderType"/>
+                <xs:element name="Payload" type="tns:PayloadType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="HeaderType">
+        <xs:sequence>
+            <xs:element name="MessageId" type="xs:string"/>
+            <xs:element name="CorrelationId" type="xs:string"/>
+            <xs:element name="SourceSystem" type="xs:string"/>
+            <xs:element name="DestinationSystem" type="xs:string"/>
+            <xs:element name="MessageType" type="tns:MessageTypeEnum"/>
+            <xs:element name="Timestamp" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="MessageTypeEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ORDER_CREATE"/>
+            <xs:enumeration value="INVENTORY_RESERVE"/>
+            <xs:enumeration value="INVENTORY_CONFIRM"/>
+            <xs:enumeration value="ORDER_CANCEL"/>
+            <xs:enumeration value="STOCK_UPDATE"/>
+            <xs:enumeration value="COD_PAYMENT_CONFIRM"/>
+            <xs:enumeration value="ERROR_RESPONSE"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="StoreCodeType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="IN-[A-Z]{2}-[A-Z]{3}-STORE[0-9]{3,5}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="PayloadType">
+        <xs:choice>
+            <xs:element name="OrderCreate">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="OrderNumber" type="xs:string"/>
+                        <xs:element name="StoreCode" type="tns:StoreCodeType"/>
+                        <xs:element name="PaymentMethod" type="xs:string"/>
+                        <xs:element name="TotalAmount" type="xs:decimal"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="InventoryReserve">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="OrderNumber" type="xs:string"/>
+                        <xs:element name="StoreCode" type="tns:StoreCodeType"/>
+                        <xs:element name="Status" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="InventoryConfirm">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="OrderNumber" type="xs:string"/>
+                        <xs:element name="StoreCode" type="tns:StoreCodeType"/>
+                        <xs:element name="ReservationStatus" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="OrderCancel">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="OrderNumber" type="xs:string"/>
+                        <xs:element name="StoreCode" type="tns:StoreCodeType"/>
+                        <xs:element name="Reason" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="StockUpdate">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="StoreCode" type="tns:StoreCodeType"/>
+                        <xs:element name="SkuCode" type="xs:string"/>
+                        <xs:element name="NewQuantity" type="xs:nonNegativeInteger"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="CodPaymentConfirm">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="OrderNumber" type="xs:string"/>
+                        <xs:element name="Amount" type="xs:decimal"/>
+                        <xs:element name="PaymentStatus" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="ErrorResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="OriginalMessageId" type="xs:string"/>
+                        <xs:element name="ErrorCode" type="xs:string"/>
+                        <xs:element name="ErrorMessage" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:choice>
+    </xs:complexType>
+</xs:schema>

@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bharatmart-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: bharatmart-backend
+  template:
+    metadata:
+      labels:
+        app: bharatmart-backend
+    spec:
+      containers:
+        - name: bharatmart-backend
+          image: bharatmart/backend:latest
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - secretRef:
+                name: bharatmart-secrets
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 45
+            periodSeconds: 15
+          resources:
+            requests:
+              memory: "384Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bharatmart-backend-svc
+spec:
+  selector:
+    app: bharatmart-backend
+  ports:
+    - port: 80
+      targetPort: 8080
+  type: ClusterIP

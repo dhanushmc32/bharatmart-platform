@@ -1,0 +1,33 @@
+{
+  "name": "BharatMart Multi-Store E-Commerce",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "21",
+      "installMaven": "true"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    }
+  },
+  "forwardPorts": [8080, 5173, 3306],
+  "portsAttributes": {
+    "8080": { "label": "Spring Boot API & Swagger" },
+    "5173": { "label": "React Vite Frontend" },
+    "3306": { "label": "MySQL 8 Community" }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "vmware.vscode-boot-dev-pack",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "cweijan.vscode-mysql-client2"
+      ]
+    }
+  }
+}
